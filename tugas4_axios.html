@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tugas 4 - Axios API</title>
+    <!-- Memasukkan Axios melalui CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <h1>Tugas 4 - Axios API</h1>
+    <button onclick="fetchProduct()">Get</button>
+    <button onclick="addProduct()">Post</button>
+    <button onclick="updateProduct()">Add</button>
+    <button onclick="deleteProduct()">Delete</button>
+    <button onclick="loginAndGetProtectedData()">Token</button>
+
+    <script>
+        function showNotification(message, isError = false) {
+            // Menggunakan alert untuk menampilkan notifikasi
+            alert(message);
+        }
+
+        // Fungsi untuk GET Request
+        function fetchProduct() {
+            axios.get('https://dummyjson.com/products/1')
+                .then(response => {
+                    console.log('GET Response:', response.data);
+                    showNotification('Get Berhasil!');
+                })
+                .catch(error => {
+                    console.error('GET Error:', error);
+                    showNotification('Get Gagal', true);
+                });
+        }
+
+        // Fungsi untuk POST Request
+        function addProduct() {
+            axios.post('https://dummyjson.com/products/add', {
+                title: 'New Product',
+                description: 'Description of new product',
+                price: 99,
+                brand: 'Brand New',
+                category: 'new'
+            })
+            .then(response => {
+                console.log('POST Response:', response.data);
+                showNotification('Post Berhasil!');
+            })
+            .catch(error => {
+                console.error('POST Error:', error);
+                showNotification('Post Gagal', true);
+            });
+        }
+
+        // Fungsi untuk PUT Request
+        function updateProduct() {
+            axios.put('https://dummyjson.com/products/1', {
+                title: 'Updated Product',
+                description: 'Updated description',
+                price: 149
+            })
+            .then(response => {
+                console.log('PUT Response:', response.data);
+                showNotification('Put Berhasil!');
+            })
+            .catch(error => {
+                console.error('PUT Error:', error);
+                showNotification('Put Gagal', true);
+            });
+        }
+
+        // Fungsi untuk DELETE Request
+        function deleteProduct() {
+            axios.delete('https://dummyjson.com/products/1')
+                .then(response => {
+                    console.log('DELETE Response:', response.data);
+                    showNotification('Delete Berhasil!');
+                })
+                .catch(error => {
+                    console.error('DELETE Error:', error);
+                    showNotification('Delete Gagal', true);
+                });
+        }
+
+        // Fungsi untuk mendapatkan token dan mengakses data yang dilindungi
+        function loginAndGetProtectedData() {
+            axios.post('https://dummyjson.com/auth/login', {
+                username: 'emilys',
+                password: 'emilyspass'
+            })
+            .then(response => {
+                console.log('Token:', response.data.token);
+                const token = response.data.token;
+
+                // Melakukan GET request ke endpoint yang dilindungi dengan menggunakan token
+                axios.get('https://dummyjson.com/auth/products', {
+                    headers: { 'Authorization': `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwidXNlcm5hbWUiOiJlbWlseXMiLCJlbWFpbCI6ImVtaWx5LmpvaG5zb25AeC5kdW1teWpzb24uY29tIiwiZmlyc3ROYW1lIjoiRW1pbHkiLCJsYXN0TmFtZSI6IkpvaG5zb24iLCJnZW5kZXIiOiJmZW1hbGUiLCJpbWFnZSI6Imh0dHBzOi8vZHVtbXlqc29uLmNvbS9pY29uL2VtaWx5cy8xMjgiLCJpYXQiOjE3MTY2MzA3NzEsImV4cCI6MTcxNjYzNDM3MX0.FNtgZ72GO068l2ZirpJ8OJGoh66Z-lOrvYVZBx08vhQ` }
+                })
+                .then(response => {
+                    console.log('Protected GET Response:', response.data);
+                    showNotification('Token Berhasil!');
+                })
+                .catch(error => {
+                    console.error('Protected GET Error:', error);
+                    showNotification('Token Gagal', true);
+                });
+            })
+            .catch(error => {
+                console.error('Login Error:', error);
+                showNotification('Login failed.', true);
+            });
+        }
+    </script>
+</body>
+</html>
